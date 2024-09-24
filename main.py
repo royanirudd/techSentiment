@@ -25,6 +25,10 @@ def main():
         # Fetch YouTube comments
         comments = fetch_youtube_comments(api_key, product)
 
+        if not comments:
+            print("No comments were fetched. Please check your API key and try again.")
+            return
+
         # Perform sentiment analysis
         sentiment_results = analyze_sentiment(comments)
 
