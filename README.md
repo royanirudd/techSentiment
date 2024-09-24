@@ -39,7 +39,7 @@ API_KEY = 'YOUR_API_KEY_HERE'
 
     https://www.youtube.com/channel/CHANNEL_ID_1
     https://www.youtube.com/channel/CHANNEL_ID_2
-
+```
 </details>
 Usage
 
