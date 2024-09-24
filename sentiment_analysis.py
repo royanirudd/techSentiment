@@ -9,9 +9,11 @@ def analyze_sentiment(comments):
 
         sia = SentimentIntensityAnalyzer()
 
-        # TODO: Implement sentiment analysis logic
-        # This is a placeholder function
-        results = [{'comment': comment, 'sentiment': 'neutral'} for comment in comments]
+        results = []
+        for comment in comments:
+            sentiment_scores = sia.polarity_scores(comment)
+            sentiment = 'positive' if sentiment_scores['compound'] > 0 else 'negative' if sentiment_scores['compound'] < 0 else 'neutral'
+            results.append({'comment': comment, 'sentiment': sentiment, 'score': sentiment_scores['compound']})
 
         logging.info(f"Sentiment analysis completed for {len(comments)} comments")
         return results

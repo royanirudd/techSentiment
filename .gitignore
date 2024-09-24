@@ -73,6 +73,9 @@ ipython_config.py
 # Logs
 *.log
 
+# Outputs/graphs
+output/
+
 # OS generated files
 .DS_Store
 .DS_Store?
