@@ -75,6 +75,9 @@ ipython_config.py
 
 # Outputs/graphs
 output/
+output/score/
+output/distribution/
+output/wordCloud/
 
 # OS generated files
 .DS_Store
