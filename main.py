@@ -29,7 +29,7 @@ def main():
         sentiment_results = analyze_sentiment(comments)
 
         # Perform EDA
-        perform_eda(sentiment_results)
+        perform_eda(sentiment_results, product)
 
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
