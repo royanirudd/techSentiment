@@ -98,3 +98,4 @@ Thumbs.db
 # Project specific
 sentiment_distribution.png
 channels.txt
+test.py
