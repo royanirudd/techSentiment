@@ -1,7 +1,8 @@
 import os
 import logging
 import matplotlib.pyplot as plt
-from collections import Counter
+import numpy as np
+from collections import Counter, OrderedDict
 from wordcloud import WordCloud
 
 def create_directory(path):
@@ -23,10 +24,19 @@ def perform_eda(sentiment_results, product):
 
         # Sentiment Distribution Bar Chart
         plt.figure(figsize=(10, 6))
-        plt.bar(sentiment_counts.keys(), sentiment_counts.values())
+        ordered_sentiments = OrderedDict([('negative', sentiment_counts['negative']),
+                                          ('neutral', sentiment_counts['neutral']),
+                                          ('positive', sentiment_counts['positive'])])
+        colors = ['#FF4136', '#FFDC00', '#2ECC40']  # Red, Yellow, Green
+        bars = plt.bar(ordered_sentiments.keys(), ordered_sentiments.values(), color=colors)
         plt.title(f'Sentiment Distribution for {product}')
         plt.xlabel('Sentiment')
         plt.ylabel('Count')
+        for bar in bars:
+            height = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2., height,
+                     f'{height}',
+                     ha='center', va='bottom')
         filename = f"{product.replace(' ', '_')}_SentimentDistribution.png"
         plt.savefig(os.path.join(distribution_dir, filename))
         plt.close()
@@ -34,7 +44,17 @@ def perform_eda(sentiment_results, product):
         # Sentiment Score Histogram
         scores = [result['score'] for result in sentiment_results]
         plt.figure(figsize=(10, 6))
-        plt.hist(scores, bins=20, edgecolor='black')
+        n, bins, patches = plt.hist(scores, bins=20, edgecolor='black')
+        
+        # color map
+        cmap = plt.cm.get_cmap('coolwarm')
+        # color each bar based on its center
+        bin_centers = 0.5 * (bins[:-1] + bins[1:])
+        # scale values to interval [0,1]
+        col = (bin_centers - min(bin_centers)) / (max(bin_centers) - min(bin_centers))
+        for c, p in zip(col, patches):
+            plt.setp(p, 'facecolor', cmap(c))
+        
         plt.title(f'Sentiment Score Distribution for {product}')
         plt.xlabel('Sentiment Score')
         plt.ylabel('Frequency')
