@@ -44,14 +44,22 @@ def perform_eda(sentiment_results, product):
 
         # Word Cloud
         all_keywords = [keyword for result in sentiment_results for keyword in result['keywords']]
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(all_keywords))
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        plt.title(f'Keyword Cloud for {product}')
-        filename = f"{product.replace(' ', '_')}_WordCloud.png"
-        plt.savefig(os.path.join(wordcloud_dir, filename))
-        plt.close()
+        
+        # Remove product name and its variations from keywords
+        product_words = set(product.lower().split())
+        filtered_keywords = [word for word in all_keywords if word.lower() not in product_words]
+        
+        if filtered_keywords:
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(filtered_keywords))
+            plt.figure(figsize=(10, 5))
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.axis('off')
+            plt.title(f'Keyword Cloud for {product}')
+            filename = f"{product.replace(' ', '_')}_WordCloud.png"
+            plt.savefig(os.path.join(wordcloud_dir, filename))
+            plt.close()
+        else:
+            print("No keywords remaining after filtering. Word cloud not generated.")
 
         # Calculate average sentiment score
         avg_score = sum(result['score'] for result in sentiment_results) / len(sentiment_results)
